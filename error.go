@@ -29,8 +29,8 @@ func WithInvalidValue(str string) e4.WrapFunc {
 var TooManyElements = fmt.Errorf("too many elements")
 
 type InvalidTarget struct {
-	Str  string
 	Type reflect.Type
+	Str  string
 }
 
 func (i *InvalidTarget) Error() string {

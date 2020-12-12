@@ -171,8 +171,8 @@ func TestAssign(t *testing.T) {
 
 	// struct
 	var st struct {
-		Foo int
 		Bar string
+		Foo int
 	}
 	if err := Assign(eval(`{
 	  "Foo": 42,
