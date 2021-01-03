@@ -25,6 +25,8 @@ github.com/google/go-cmp v0.5.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/reusee/e4 v0.0.0-20201207080218-3198289fa9fd h1:7lyrjMGNVY2fEMb3j4nprCsNcXOkLH3XIXodpVCZ+W8=
 github.com/reusee/e4 v0.0.0-20201207080218-3198289fa9fd/go.mod h1:uKxRTtwTi6F66Mzc+Lk/cEPBGwv0W1Macn9it1OXVE4=
+github.com/reusee/e4 v0.0.0-20210103145956-8469caf9159a h1:feY29m6rIO1gaHhyknTvq8kOqEmEXaQBsFL8ZB69azI=
+github.com/reusee/e4 v0.0.0-20210103145956-8469caf9159a/go.mod h1:uKxRTtwTi6F66Mzc+Lk/cEPBGwv0W1Macn9it1OXVE4=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5 h1:F1LaLz0cvAJWMa5r3bogEYXD7/5fgA9a9jOX4DAobN8=
 go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5/go.mod h1:vxxlMsgCAPH7BR2LtxjJC4WhhZhCGd/b01+CIpj8H4k=
@@ -55,6 +57,8 @@ golang.org/x/sys v0.0.0-20200803210538-64077c9b5642/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201211090839-8ad439b19e0f h1:QdHQnPce6K4XQewki9WNbG5KOROuDzqO3NaYjI1cXJ0=
 golang.org/x/sys v0.0.0-20201211090839-8ad439b19e0f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20201231184435-2d18734c6014 h1:joucsQqXmyBVxViHCPFjG3hx8JzIFSaym3l3MM/Jsdg=
+golang.org/x/sys v0.0.0-20201231184435-2d18734c6014/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=

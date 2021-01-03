@@ -17,7 +17,7 @@ func (i *InvalidValue) Error() string {
 
 func WithInvalidValue(str string) e4.WrapFunc {
 	return func(err error) error {
-		return e4.Chain{
+		return e4.Error{
 			Err: &InvalidValue{
 				Str: str,
 			},
