@@ -5,10 +5,13 @@ import (
 	"fmt"
 
 	"github.com/reusee/e4"
+	"github.com/reusee/sb"
 )
 
 type (
-	any = interface{}
+	any  = interface{}
+	Src  = sb.Proc
+	Sink = sb.Sink
 )
 
 var (
@@ -16,4 +19,6 @@ var (
 	as = errors.As
 	pt = fmt.Printf
 	we = e4.Wrap
+	he = e4.Handle
+	ce = e4.Check
 )
