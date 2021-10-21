@@ -12,10 +12,8 @@ type (
 )
 
 var (
-	is   = errors.Is
-	as   = errors.As
-	pt   = fmt.Printf
-	ce   = e4.Check
-	he   = e4.Handle
-	wrap = e4.Wrap
+	is = errors.Is
+	as = errors.As
+	pt = fmt.Printf
+	we = e4.Wrap
 )

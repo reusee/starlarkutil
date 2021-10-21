@@ -3,7 +3,7 @@ module github.com/reusee/starlarkutil
 go 1.16
 
 require (
-	github.com/reusee/e4 v0.0.0-20210103145956-8469caf9159a
-	go.starlark.net v0.0.0-20201210151846-e81fc95f7bd5
-	golang.org/x/sys v0.0.0-20201231184435-2d18734c6014 // indirect
+	github.com/reusee/e4 v0.0.0-20211021052625-556a58dc4948
+	go.starlark.net v0.0.0-20211013185944-b0039bd2cfe3
+	golang.org/x/sys v0.0.0-20211020174200-9d6173849985 // indirect
 )

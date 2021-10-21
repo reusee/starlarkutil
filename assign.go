@@ -32,10 +32,9 @@ func Assign(value starlark.Value, target reflect.Value) error {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		i, err := starlark.NumberToInt(value)
 		if err != nil {
-			return wrap(
-				err,
+			return we.With(
 				WithInvalidValue(value.String()),
-			)
+			)(err)
 		}
 		n, ok := i.Int64()
 		if !ok {
@@ -48,10 +47,9 @@ func Assign(value starlark.Value, target reflect.Value) error {
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		i, err := starlark.NumberToInt(value)
 		if err != nil {
-			return wrap(
-				err,
+			return we.With(
 				WithInvalidValue(value.String()),
-			)
+			)(err)
 		}
 		n, ok := i.Uint64()
 		if !ok {
@@ -76,10 +74,9 @@ func Assign(value starlark.Value, target reflect.Value) error {
 		i := 0
 		for iter.Next(&v) {
 			if i >= target.Elem().Len() {
-				return wrap(
-					TooManyElements,
+				return we.With(
 					WithInvalidValue(value.String()),
-				)
+				)(TooManyElements)
 			}
 			if err := Assign(v, target.Elem().Index(i).Addr()); err != nil {
 				return err
