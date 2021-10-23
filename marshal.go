@@ -117,7 +117,6 @@ func MarshalValue(value starlark.Value, cont Src) Src {
 
 		}
 
-		return nil, nil, nil
 	}
 }
 
