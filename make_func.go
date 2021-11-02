@@ -11,21 +11,18 @@ import (
 func MakeFunc(name string, fn any) *starlark.Builtin {
 
 	//TODO cache info
+	fnValue := reflect.ValueOf(fn)
 	fnType := reflect.TypeOf(fn)
 	if fnType.Kind() != reflect.Func { // NOCOVER
 		panic(fmt.Errorf("not a function: %T", fn))
 	}
 	numParams := fnType.NumIn()
 	numReturn := fnType.NumOut()
-	if numReturn > 1 { // NOCOVER
-		panic(fmt.Errorf("function must return zero or one value: %T", fn))
-	}
 	var paramTypes []reflect.Type
 	for i := 0; i < numParams; i++ {
 		paramTypes = append(paramTypes, fnType.In(i))
 	}
 	isVariadic := fnType.IsVariadic()
-	fnValue := reflect.ValueOf(fn)
 
 	return starlark.NewBuiltin(name, func(
 		t *starlark.Thread,
@@ -79,13 +76,30 @@ func MakeFunc(name string, fn any) *starlark.Builtin {
 			return
 		}
 
-		proc := sb.MarshalValue(sb.DefaultCtx, retValues[0], nil)
-		if err := sb.Copy(
-			&proc,
-			Unmarshal(&ret, nil),
-		); err != nil { // NOCOVER
-			return nil, err
+		if numReturn == 1 {
+			proc := sb.MarshalValue(sb.DefaultCtx, retValues[0], nil)
+			if err := sb.Copy(
+				&proc,
+				Unmarshal(&ret, nil),
+			); err != nil { // NOCOVER
+				return nil, err
+			}
+			return
 		}
+
+		var tuple starlark.Tuple
+		for _, value := range retValues {
+			var elem starlark.Value
+			proc := sb.MarshalValue(sb.DefaultCtx, value, nil)
+			if err := sb.Copy(
+				&proc,
+				Unmarshal(&elem, nil),
+			); err != nil { // NOCOVER
+				return nil, err
+			}
+			tuple = append(tuple, elem)
+		}
+		ret = tuple
 
 		return
 	})

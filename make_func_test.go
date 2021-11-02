@@ -191,6 +191,14 @@ func TestMakeFunc(t *testing.T) {
 		t.Fatal()
 	}
 
+	if !eval(`foo(3)[1] == 6`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(l int) (int, int) {
+			return l, l * 2
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
 	if !eval(`foo('foo') == 'foo'`, starlark.StringDict{
 		"foo": MakeFunc("foo", func(s string) string {
 			return s
