@@ -223,4 +223,23 @@ func TestMakeFunc(t *testing.T) {
 		t.Fatal()
 	}
 
+	if !eval(`foo(1, 2, 3) == 6`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(ints ...int) int {
+			var sum int
+			for _, i := range ints {
+				sum += i
+			}
+			return sum
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
+	if !eval(`foo() == None`, starlark.StringDict{
+		"foo": MakeFunc("foo", func() {
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
 }
