@@ -9,7 +9,7 @@ func TestAssign(t *testing.T) {
 
 	// bool
 	var b bool
-	if err := Assign(eval("True"), reflect.ValueOf(&b)); err != nil {
+	if err := Assign(eval("True", nil), reflect.ValueOf(&b)); err != nil {
 		t.Fatal(err)
 	}
 	if !b {
@@ -18,7 +18,7 @@ func TestAssign(t *testing.T) {
 
 	// int
 	var i8 int8
-	if err := Assign(eval("42"), reflect.ValueOf(&i8)); err != nil {
+	if err := Assign(eval("42", nil), reflect.ValueOf(&i8)); err != nil {
 		t.Fatal(err)
 	}
 	if i8 != 42 {
@@ -27,7 +27,7 @@ func TestAssign(t *testing.T) {
 
 	// uint
 	var u16 uint16
-	if err := Assign(eval("42"), reflect.ValueOf(&u16)); err != nil {
+	if err := Assign(eval("42", nil), reflect.ValueOf(&u16)); err != nil {
 		t.Fatal(err)
 	}
 	if u16 != 42 {
@@ -36,7 +36,7 @@ func TestAssign(t *testing.T) {
 
 	// float
 	var f32 float32
-	if err := Assign(eval("42"), reflect.ValueOf(&f32)); err != nil {
+	if err := Assign(eval("42", nil), reflect.ValueOf(&f32)); err != nil {
 		t.Fatal(err)
 	}
 	if f32 != 42 {
@@ -45,7 +45,7 @@ func TestAssign(t *testing.T) {
 
 	// array
 	var array [2]int
-	if err := Assign(eval("[42, 1]"), reflect.ValueOf(&array)); err != nil {
+	if err := Assign(eval("[42, 1]", nil), reflect.ValueOf(&array)); err != nil {
 		t.Fatal(err)
 	}
 	if array[0] != 42 {
@@ -55,7 +55,7 @@ func TestAssign(t *testing.T) {
 		t.Fatal()
 	}
 
-	err := Assign(eval("[42, 1, 2]"), reflect.ValueOf(&array))
+	err := Assign(eval("[42, 1, 2]", nil), reflect.ValueOf(&array))
 	if !is(err, TooManyElements) {
 		t.Fatal()
 	}
@@ -66,25 +66,25 @@ func TestAssign(t *testing.T) {
 
 	// interface
 	var v any
-	if err := Assign(eval("42.2"), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval("42.2", nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal()
 	}
 	if v != 42.2 {
 		t.Fatal()
 	}
-	if err := Assign(eval("42"), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval("42", nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal()
 	}
 	if v != 42 {
 		t.Fatal()
 	}
-	if err := Assign(eval(`"42"`), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval(`"42"`, nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal()
 	}
 	if v != "42" {
 		t.Fatal()
 	}
-	if err := Assign(eval(`[1, 2, 3]`), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval(`[1, 2, 3]`, nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal(err)
 	}
 	if l, ok := v.([]any); !ok {
@@ -94,7 +94,7 @@ func TestAssign(t *testing.T) {
 	} else if l[2] != 3 {
 		t.Fatal()
 	}
-	if err := Assign(eval(`{1: 2, 3: 4}`), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval(`{1: 2, 3: 4}`, nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal()
 	}
 	if m, ok := v.(map[any]any); !ok {
@@ -102,7 +102,7 @@ func TestAssign(t *testing.T) {
 	} else if m[1] != 2 {
 		t.Fatal()
 	}
-	if err := Assign(eval(`True`), reflect.ValueOf(&v)); err != nil {
+	if err := Assign(eval(`True`, nil), reflect.ValueOf(&v)); err != nil {
 		t.Fatal(err)
 	}
 	if v != true {
@@ -111,7 +111,7 @@ func TestAssign(t *testing.T) {
 
 	// map
 	var m map[int]string
-	if err := Assign(eval(`{1: "foo", 3: "bar"}`), reflect.ValueOf(&m)); err != nil {
+	if err := Assign(eval(`{1: "foo", 3: "bar"}`, nil), reflect.ValueOf(&m)); err != nil {
 		t.Fatal()
 	}
 	if m[1] != "foo" {
@@ -123,7 +123,7 @@ func TestAssign(t *testing.T) {
 
 	// pointer
 	var ip ***int
-	if err := Assign(eval(`42`), reflect.ValueOf(&ip)); err != nil {
+	if err := Assign(eval(`42`, nil), reflect.ValueOf(&ip)); err != nil {
 		t.Fatal(err)
 	}
 	if ***ip != 42 {
@@ -131,7 +131,7 @@ func TestAssign(t *testing.T) {
 	}
 	var p **int
 	ip = &p
-	if err := Assign(eval(`1`), reflect.ValueOf(&ip)); err != nil {
+	if err := Assign(eval(`1`, nil), reflect.ValueOf(&ip)); err != nil {
 		t.Fatal(err)
 	}
 	if ***ip != 1 {
@@ -140,7 +140,7 @@ func TestAssign(t *testing.T) {
 
 	// slice
 	var slice []int
-	if err := Assign(eval(`[1, 2, 3, 4]`), reflect.ValueOf(&slice)); err != nil {
+	if err := Assign(eval(`[1, 2, 3, 4]`, nil), reflect.ValueOf(&slice)); err != nil {
 		t.Fatal(err)
 	}
 	if len(slice) != 4 {
@@ -150,7 +150,7 @@ func TestAssign(t *testing.T) {
 		t.Fatal()
 	}
 	var anySlice []any
-	if err := Assign(eval(`[1, True, "foo"]`), reflect.ValueOf(&anySlice)); err != nil {
+	if err := Assign(eval(`[1, True, "foo"]`, nil), reflect.ValueOf(&anySlice)); err != nil {
 		t.Fatal(err)
 	}
 	if len(anySlice) != 3 {
@@ -162,7 +162,7 @@ func TestAssign(t *testing.T) {
 
 	// string
 	var s string
-	if err := Assign(eval(`"foo"`), reflect.ValueOf(&s)); err != nil {
+	if err := Assign(eval(`"foo"`, nil), reflect.ValueOf(&s)); err != nil {
 		t.Fatal(err)
 	}
 	if s != "foo" {
@@ -179,7 +179,7 @@ func TestAssign(t *testing.T) {
 	  "Bar": "bar",
 	  "Baz": 42.0,
     42: 42,
-	}`), reflect.ValueOf(&st)); err != nil {
+	}`, nil), reflect.ValueOf(&st)); err != nil {
 		t.Fatal(err)
 	}
 	if st.Foo != 42 {
@@ -190,7 +190,7 @@ func TestAssign(t *testing.T) {
 	}
 
 	// nil target
-	if err := Assign(eval("42"), reflect.ValueOf((*int)(nil))); err != nil {
+	if err := Assign(eval("42", nil), reflect.ValueOf((*int)(nil))); err != nil {
 		t.Fatal(err)
 	}
 
@@ -199,7 +199,7 @@ func TestAssign(t *testing.T) {
 func TestAssignInvalidTarget(t *testing.T) {
 
 	// bad target
-	err := Assign(eval("42"), reflect.ValueOf(0))
+	err := Assign(eval("42", nil), reflect.ValueOf(0))
 	var invalidTarget *InvalidTarget
 	if !as(err, &invalidTarget) {
 		t.Fatal()
@@ -207,7 +207,7 @@ func TestAssignInvalidTarget(t *testing.T) {
 
 	// type mismatch
 	var ip ***int
-	err = Assign(eval("True"), reflect.ValueOf(&ip))
+	err = Assign(eval("True", nil), reflect.ValueOf(&ip))
 	var invalidValue *InvalidValue
 	if !as(err, &invalidValue) {
 		t.Fatal()
@@ -215,43 +215,43 @@ func TestAssignInvalidTarget(t *testing.T) {
 
 	// ivnalid type
 	var c chan bool
-	err = Assign(eval("42"), reflect.ValueOf(&c))
+	err = Assign(eval("42", nil), reflect.ValueOf(&c))
 	if !as(err, &invalidTarget) {
 		t.Fatal()
 	}
 
 	// invalid int
 	var i int
-	err = Assign(eval("True"), reflect.ValueOf(&i))
+	err = Assign(eval("True", nil), reflect.ValueOf(&i))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
-	err = Assign(eval("100000000000000000000000"), reflect.ValueOf(&i))
+	err = Assign(eval("100000000000000000000000", nil), reflect.ValueOf(&i))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 
 	// invalid uint
 	var u uint
-	err = Assign(eval("True"), reflect.ValueOf(&u))
+	err = Assign(eval("True", nil), reflect.ValueOf(&u))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
-	err = Assign(eval("100000000000000000000000"), reflect.ValueOf(&u))
+	err = Assign(eval("100000000000000000000000", nil), reflect.ValueOf(&u))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 
 	// invalid float
 	var f float64
-	err = Assign(eval("True"), reflect.ValueOf(&f))
+	err = Assign(eval("True", nil), reflect.ValueOf(&f))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 
 	// invalid array
 	var ia [2]int
-	err = Assign(eval("[1, True]"), reflect.ValueOf(&ia))
+	err = Assign(eval("[1, True]", nil), reflect.ValueOf(&ia))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
@@ -260,34 +260,34 @@ func TestAssignInvalidTarget(t *testing.T) {
 	var iface interface {
 		Foo()
 	}
-	err = Assign(eval("lambda: 42"), reflect.ValueOf(&iface))
+	err = Assign(eval("lambda: 42", nil), reflect.ValueOf(&iface))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 	var some any
-	err = Assign(eval("10000000000000000000000000"), reflect.ValueOf(&some))
+	err = Assign(eval("10000000000000000000000000", nil), reflect.ValueOf(&some))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
-	err = Assign(eval("[10000000000000000000000000]"), reflect.ValueOf(&some))
+	err = Assign(eval("[10000000000000000000000000]", nil), reflect.ValueOf(&some))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
-	err = Assign(eval("{1: 10000000000000000000000000}"), reflect.ValueOf(&some))
+	err = Assign(eval("{1: 10000000000000000000000000}", nil), reflect.ValueOf(&some))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 
 	// invalid map
 	var m map[int]string
-	err = Assign(eval("{10000000000000000000000000: 1}"), reflect.ValueOf(&m))
+	err = Assign(eval("{10000000000000000000000000: 1}", nil), reflect.ValueOf(&m))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
 
 	// invalid string
 	var s string
-	err = Assign(eval("42"), reflect.ValueOf(&s))
+	err = Assign(eval("42", nil), reflect.ValueOf(&s))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}
@@ -296,7 +296,7 @@ func TestAssignInvalidTarget(t *testing.T) {
 	var st struct {
 		Foo int
 	}
-	err = Assign(eval("{'Foo': 10000000000000000000000000}"), reflect.ValueOf(&st))
+	err = Assign(eval("{'Foo': 10000000000000000000000000}", nil), reflect.ValueOf(&st))
 	if !as(err, &invalidValue) {
 		t.Fatal()
 	}

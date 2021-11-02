@@ -14,7 +14,7 @@ func TestMarshal(t *testing.T) {
 
 	var b bool
 	ce(sb.Copy(
-		Marshal(eval("True"), nil, nil),
+		Marshal(eval("True", nil), nil, nil),
 		sb.Unmarshal(&b),
 	))
 	if !b {
@@ -23,7 +23,7 @@ func TestMarshal(t *testing.T) {
 
 	var v any
 	ce(sb.Copy(
-		Marshal(eval("None"), nil, nil),
+		Marshal(eval("None", nil), nil, nil),
 		sb.Unmarshal(&v),
 	))
 	if v != nil {
@@ -32,7 +32,7 @@ func TestMarshal(t *testing.T) {
 
 	var bs []byte
 	ce(sb.Copy(
-		Marshal(eval("bytes('Foo')"), nil, nil),
+		Marshal(eval("bytes('Foo')", nil), nil, nil),
 		sb.Unmarshal(&bs),
 	))
 	if !bytes.Equal(bs, []byte("Foo")) {
@@ -41,7 +41,7 @@ func TestMarshal(t *testing.T) {
 
 	var i int
 	ce(sb.Copy(
-		Marshal(eval("42"), nil, nil),
+		Marshal(eval("42", nil), nil, nil),
 		sb.Unmarshal(&i),
 	))
 	if i != 42 {
@@ -50,7 +50,7 @@ func TestMarshal(t *testing.T) {
 
 	var f float64
 	ce(sb.Copy(
-		Marshal(eval("4.2"), nil, nil),
+		Marshal(eval("4.2", nil), nil, nil),
 		sb.Unmarshal(&f),
 	))
 	if f != 4.2 {
@@ -59,7 +59,7 @@ func TestMarshal(t *testing.T) {
 
 	var s string
 	ce(sb.Copy(
-		Marshal(eval("'foo'"), nil, nil),
+		Marshal(eval("'foo'", nil), nil, nil),
 		sb.Unmarshal(&s),
 	))
 	if s != "foo" {
@@ -68,7 +68,7 @@ func TestMarshal(t *testing.T) {
 
 	var ints []int
 	ce(sb.Copy(
-		Marshal(eval("[1, 2, 3]"), nil, nil),
+		Marshal(eval("[1, 2, 3]", nil), nil, nil),
 		sb.Unmarshal(&ints),
 	))
 	if len(ints) != 3 {
@@ -80,7 +80,7 @@ func TestMarshal(t *testing.T) {
 
 	var tuple sb.Tuple
 	ce(sb.Copy(
-		Marshal(eval("(1, 2, 3)"), nil, nil),
+		Marshal(eval("(1, 2, 3)", nil), nil, nil),
 		sb.Unmarshal(&tuple),
 	))
 	if len(ints) != 3 {
@@ -92,7 +92,7 @@ func TestMarshal(t *testing.T) {
 
 	var m map[int]int
 	ce(sb.Copy(
-		Marshal(eval("{1: 2, 3: 4, 5: 6}"), nil, nil),
+		Marshal(eval("{1: 2, 3: 4, 5: 6}", nil), nil, nil),
 		sb.Unmarshal(&m),
 	))
 	if len(m) != 3 {
@@ -110,7 +110,7 @@ func TestMarshal(t *testing.T) {
 
 	var set map[int]bool
 	ce(sb.Copy(
-		Marshal(eval("set((1, 2, 3))"), nil, nil),
+		Marshal(eval("set((1, 2, 3))", nil), nil, nil),
 		sb.Unmarshal(&set),
 	))
 	if len(m) != 3 {

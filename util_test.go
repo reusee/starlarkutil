@@ -10,12 +10,12 @@ func init() {
 	resolve.AllowLambda = true
 }
 
-func eval(src any) starlark.Value {
+func eval(src any, globals map[string]starlark.Value) starlark.Value {
 	v, err := starlark.Eval(
 		new(starlark.Thread),
 		"testing",
 		src,
-		nil,
+		globals,
 	)
 	if err != nil {
 		panic(err)
