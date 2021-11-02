@@ -250,4 +250,26 @@ func TestMakeFunc(t *testing.T) {
 		t.Fatal()
 	}
 
+	if !eval(`foo(Foo = 1, Bar = 2) == 3`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(arg struct {
+			Foo int
+			Bar int
+		}) int {
+			return arg.Foo + arg.Bar
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
+	if !eval(`foo({'Foo': 42, 'Bar': 99}, Foo = 1, Bar = 2) == 3`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(arg struct {
+			Foo int
+			Bar int
+		}) int {
+			return arg.Foo + arg.Bar
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
 }

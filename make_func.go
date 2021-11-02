@@ -3,6 +3,7 @@ package starlarkutil
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/reusee/sb"
 	"go.starlark.net/starlark"
@@ -23,6 +24,18 @@ func MakeFunc(name string, fn any) *starlark.Builtin {
 		paramTypes = append(paramTypes, fnType.In(i))
 	}
 	isVariadic := fnType.IsVariadic()
+	var kwargsSpecs map[string]reflect.StructField
+	if numParams > 0 {
+		lastType := fnType.In(numParams - 1)
+		if lastType.Kind() == reflect.Struct {
+			kwargsSpecs = make(map[string]reflect.StructField)
+			for i := 0; i < lastType.NumField(); i++ {
+				field := lastType.Field(i)
+				name := strings.ToLower(field.Name)
+				kwargsSpecs[name] = field
+			}
+		}
+	}
 
 	return starlark.NewBuiltin(name, func(
 		t *starlark.Thread,
@@ -36,12 +49,17 @@ func MakeFunc(name string, fn any) *starlark.Builtin {
 
 		numArgs := args.Len()
 		if numArgs < numParams { // NOCOVER
-			return nil, fmt.Errorf("not enough argument")
+			if len(kwargsSpecs) > 0 {
+				if numArgs < numParams-1 {
+					return nil, fmt.Errorf("not enough argument")
+				}
+			} else {
+				return nil, fmt.Errorf("not enough argument")
+			}
 		}
 
 		var argValues []reflect.Value
 		for i := 0; i < numParams; i++ {
-
 			if isVariadic && i == numParams-1 {
 				t := paramTypes[i].Elem()
 				for ; i < numArgs; i++ {
@@ -58,16 +76,36 @@ func MakeFunc(name string, fn any) *starlark.Builtin {
 			}
 
 			ptr := reflect.New(paramTypes[i])
-			if err := sb.Copy(
-				Marshal(args.Index(i), &paramTypes[i], nil),
-				sb.UnmarshalValue(sb.DefaultCtx, ptr, nil),
-			); err != nil { // NOCOVER
-				return nil, err
+			if i < numArgs {
+				// kwargs may omit the last argument
+				if err := sb.Copy(
+					Marshal(args.Index(i), &paramTypes[i], nil),
+					sb.UnmarshalValue(sb.DefaultCtx, ptr, nil),
+				); err != nil { // NOCOVER
+					return nil, err
+				}
 			}
 			argValues = append(argValues, ptr.Elem())
 		}
 
-		//TODO kwargs
+		if len(kwargs) > 0 {
+			kwValue := argValues[len(argValues)-1]
+			for _, tuple := range kwargs {
+				key := strings.ToLower(tuple[0].(starlark.String).GoString())
+				spec, ok := kwargsSpecs[key]
+				if !ok {
+					return nil, fmt.Errorf("no such keyword argument: %s", key)
+				}
+				ptr := reflect.New(spec.Type)
+				if err := sb.Copy(
+					Marshal(tuple[1], &spec.Type, nil),
+					sb.UnmarshalValue(sb.DefaultCtx, ptr, nil),
+				); err != nil {
+					return nil, err
+				}
+				kwValue.FieldByIndex(spec.Index).Set(ptr.Elem())
+			}
+		}
 
 		retValues := fnValue.Call(argValues)
 
