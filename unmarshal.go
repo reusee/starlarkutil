@@ -10,13 +10,13 @@ import (
 
 func Unmarshal(target *starlark.Value, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil {
+		if token == nil { // NOCOVER
 			return nil, we.With(
 				e4.With(sb.ExpectingValue),
 			)(sb.UnmarshalError)
 		}
 
-		if target == nil {
+		if target == nil { // NOCOVER
 			var v starlark.Value
 			target = &v
 		}
@@ -94,7 +94,7 @@ func Unmarshal(target *starlark.Value, cont Sink) Sink {
 				},
 			), nil
 
-		default:
+		default: // NOCOVER
 			panic(fmt.Errorf("unknown token: %+v", token))
 		}
 
@@ -104,7 +104,7 @@ func Unmarshal(target *starlark.Value, cont Sink) Sink {
 
 func UnmarshalArray(list *starlark.List, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil {
+		if token == nil { // NOCOVER
 			return nil, we.With(
 				e4.With(sb.ExpectingValue),
 			)(sb.UnmarshalError)
@@ -129,7 +129,7 @@ func UnmarshalDict(
 	cont Sink,
 ) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil {
+		if token == nil { // NOCOVER
 			return nil, we.With(
 				e4.With(sb.ExpectingValue),
 			)(sb.UnmarshalError)
@@ -159,7 +159,7 @@ func UnmarshalTuple(
 	cont Sink,
 ) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil {
+		if token == nil { // NOCOVER
 			return nil, we.With(
 				e4.With(sb.ExpectingValue),
 			)(sb.UnmarshalError)

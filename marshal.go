@@ -38,7 +38,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 		case starlark.Int:
 			if t == nil {
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -50,7 +50,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 			switch (*t).Kind() {
 			case reflect.Int:
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -59,7 +59,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Int8:
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -68,7 +68,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Int16:
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -77,7 +77,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Int32:
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -86,7 +86,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Int64:
 				i64, ok := value.Int64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("int too large"))
 				}
 				return &sb.Token{
@@ -96,7 +96,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 
 			case reflect.Uint:
 				u64, ok := value.Uint64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("uint too large"))
 				}
 				return &sb.Token{
@@ -105,7 +105,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Uint8:
 				u64, ok := value.Uint64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("uint too large"))
 				}
 				return &sb.Token{
@@ -114,7 +114,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Uint16:
 				u64, ok := value.Uint64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("uint too large"))
 				}
 				return &sb.Token{
@@ -123,7 +123,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Uint32:
 				u64, ok := value.Uint64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("uint too large"))
 				}
 				return &sb.Token{
@@ -132,7 +132,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				}, cont, nil
 			case reflect.Uint64:
 				u64, ok := value.Uint64()
-				if !ok {
+				if !ok { // NOCOVER
 					return nil, nil, we(fmt.Errorf("uint too large"))
 				}
 				return &sb.Token{
@@ -140,7 +140,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 					Value: u64,
 				}, cont, nil
 
-			default:
+			default: // NOCOVER
 				return nil, nil, we(fmt.Errorf("not an integer: %v", *t))
 			}
 
@@ -162,7 +162,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 					Kind:  sb.KindFloat64,
 					Value: float64(value),
 				}, cont, nil
-			default:
+			default: // NOCOVER
 				return nil, nil, we(fmt.Errorf("not a float: %v", *t))
 			}
 
@@ -176,7 +176,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 			iter := value.Iterate()
 			var elemType *reflect.Type
 			if t != nil {
-				if kind := (*t).Kind(); kind != reflect.Slice && kind != reflect.Array {
+				if kind := (*t).Kind(); kind != reflect.Slice && kind != reflect.Array { // NOCOVER
 					return nil, nil, fmt.Errorf("not a list: %v", *t)
 				}
 				e := (*t).Elem()
@@ -198,7 +198,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 		case starlark.Tuple:
 			var types []reflect.Type
 			if t != nil {
-				if (*t).Kind() != reflect.Func {
+				if (*t).Kind() != reflect.Func { // NOCOVER
 					return nil, nil, fmt.Errorf("not a tuple: %v", *t)
 				}
 				//TODO cache result
@@ -220,8 +220,14 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 
 		case *starlark.Dict:
 			iter := value.Iterate()
+			startKind := sb.KindMap
+			endKind := sb.KindMapEnd
+			if t != nil && (*t).Kind() != reflect.Map {
+				startKind = sb.KindObject
+				endKind = sb.KindObjectEnd
+			}
 			return &sb.Token{
-					Kind: sb.KindMap,
+					Kind: startKind,
 				}, marshalDict(
 					value,
 					iter,
@@ -229,7 +235,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 					func() (*sb.Token, Src, error) {
 						iter.Done()
 						return &sb.Token{
-							Kind: sb.KindMapEnd,
+							Kind: endKind,
 						}, cont, nil
 					},
 				), nil
@@ -250,7 +256,7 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 					},
 				), nil
 
-		default:
+		default: // NOCOVER
 			panic(fmt.Errorf("unsupported type %T", value))
 
 		}
@@ -310,10 +316,10 @@ func marshalDict(
 				keyType,
 				func() (*sb.Token, Src, error) {
 					value, ok, err := dict.Get(key)
-					if err != nil {
+					if err != nil { // NOCOVER
 						return nil, nil, err
 					}
-					if !ok {
+					if !ok { // NOCOVER
 						panic("impossible")
 					}
 					//TODO get type from struct field
