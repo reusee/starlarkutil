@@ -49,7 +49,7 @@ func MakeFunc(name string, fn any) *starlark.Builtin {
 
 		numArgs := args.Len()
 		if numArgs < numParams { // NOCOVER
-			if len(kwargsSpecs) > 0 {
+			if len(kwargsSpecs) > 0 || isVariadic {
 				if numArgs < numParams-1 {
 					return nil, fmt.Errorf("not enough argument")
 				}

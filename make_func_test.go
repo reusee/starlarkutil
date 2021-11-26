@@ -272,4 +272,26 @@ func TestMakeFunc(t *testing.T) {
 		t.Fatal()
 	}
 
+	if !eval(`foo(1, 2, 3, 4) == 10`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(i int, args ...int) int {
+			for _, arg := range args {
+				i += arg
+			}
+			return i
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
+	if !eval(`foo(1) == 1`, starlark.StringDict{
+		"foo": MakeFunc("foo", func(i int, args ...int) int {
+			for _, arg := range args {
+				i += arg
+			}
+			return i
+		}),
+	}).Truth() {
+		t.Fatal()
+	}
+
 }
