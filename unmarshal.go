@@ -2,8 +2,8 @@ package starlarkutil
 
 import (
 	"fmt"
+	"io"
 
-	"github.com/reusee/e4"
 	"github.com/reusee/sb"
 	"go.starlark.net/starlark"
 )
@@ -12,7 +12,7 @@ func Unmarshal(target *starlark.Value, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
 		if token == nil { // NOCOVER
 			return nil, we.With(
-				e4.With(sb.ExpectingValue),
+				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
 		}
 
@@ -106,7 +106,7 @@ func UnmarshalArray(list *starlark.List, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
 		if token == nil { // NOCOVER
 			return nil, we.With(
-				e4.With(sb.ExpectingValue),
+				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
 		}
 		if token.Kind == sb.KindArrayEnd {
@@ -131,7 +131,7 @@ func UnmarshalDict(
 	return func(token *sb.Token) (Sink, error) {
 		if token == nil { // NOCOVER
 			return nil, we.With(
-				e4.With(sb.ExpectingValue),
+				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
 		}
 		if token.Kind == endKind {
@@ -161,7 +161,7 @@ func UnmarshalTuple(
 	return func(token *sb.Token) (Sink, error) {
 		if token == nil { // NOCOVER
 			return nil, we.With(
-				e4.With(sb.ExpectingValue),
+				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
 		}
 		if token.Kind == sb.KindTupleEnd {
