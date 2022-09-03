@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/reusee/e4"
+	"github.com/reusee/e5"
 	"github.com/reusee/sb"
 )
 
 func TestMarshal(t *testing.T) {
-	defer he(nil, e4.TestingFatal(t))
+	defer he(nil, e5.TestingFatal(t))
 
 	var b bool
 	ce(sb.Copy(

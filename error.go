@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/reusee/e4"
+	"github.com/reusee/e5"
 )
 
 type InvalidValue struct {
@@ -15,14 +15,14 @@ func (i *InvalidValue) Error() string {
 	return fmt.Sprintf("invalid value `%s`", i.Str)
 }
 
-func WithInvalidValue(str string) e4.WrapFunc {
+func WithInvalidValue(str string) e5.WrapFunc {
 	return func(err error) error {
-		return e4.Error{
-			Err: &InvalidValue{
+		return e5.Chain(
+			&InvalidValue{
 				Str: str,
 			},
-			Prev: err,
-		}
+			err,
+		)
 	}
 }
 

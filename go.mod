@@ -3,9 +3,9 @@ module github.com/reusee/starlarkutil
 go 1.16
 
 require (
-	github.com/reusee/e4 v0.0.0-20211111112921-a1e3637d4313
-	github.com/reusee/pr v0.0.0-20211219085637-0e1ddac0e236 // indirect
-	github.com/reusee/sb v0.0.0-20211214142515-c9cbed185b71
-	go.starlark.net v0.0.0-20211203141949-70c0e40ae128
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	github.com/reusee/e5 v0.0.0-20220902143513-42365073754d
+	github.com/reusee/pr v0.0.0-20220902154654-adb0578fc28b // indirect
+	github.com/reusee/sb v0.0.0-20220902150420-e7a4550aa30a
+	go.starlark.net v0.0.0-20220817180228-f738f5508c12
+	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
 )
