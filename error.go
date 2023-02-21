@@ -17,12 +17,12 @@ func (i *InvalidValue) Error() string {
 
 func WithInvalidValue(str string) e5.WrapFunc {
 	return func(err error) error {
-		return e5.Join(
-			&InvalidValue{
-				Str: str,
-			},
-			err,
-		)
+		if err == nil {
+			return nil
+		}
+		return e5.Join(err, &InvalidValue{
+			Str: str,
+		})
 	}
 }
 
