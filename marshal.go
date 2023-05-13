@@ -14,209 +14,187 @@ func Marshal(value starlark.Value, t *reflect.Type, cont Src) *Src {
 }
 
 func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
-	return func() (*sb.Token, Src, error) {
+	return func(token *sb.Token) (Src, error) {
 
 		switch value := value.(type) {
 
 		case starlark.NoneType:
-			return &sb.Token{
-				Kind: sb.KindNil,
-			}, cont, nil
+			token.Kind = sb.KindNil
+			return cont, nil
 
 		case starlark.Bool:
-			return &sb.Token{
-				Kind:  sb.KindBool,
-				Value: bool(value),
-			}, cont, nil
+			token.Kind = sb.KindBool
+			token.Value = bool(value)
+			return cont, nil
 
 		case starlark.Bytes:
-			return &sb.Token{
-				Kind:  sb.KindBytes,
-				Value: []byte(value),
-			}, cont, nil
+			token.Kind = sb.KindBytes
+			token.Value = []byte(value)
+			return cont, nil
 
 		case starlark.Int:
 			if t == nil {
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt,
-					Value: int(i64),
-				}, cont, nil
+				token.Kind = sb.KindInt
+				token.Value = int(i64)
+				return cont, nil
 			}
 
 			switch (*t).Kind() {
 			case reflect.Int:
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt,
-					Value: int(i64),
-				}, cont, nil
+				token.Kind = sb.KindInt
+				token.Value = int(i64)
+				return cont, nil
 			case reflect.Int8:
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt8,
-					Value: int8(i64),
-				}, cont, nil
+				token.Kind = sb.KindInt8
+				token.Value = int8(i64)
+				return cont, nil
 			case reflect.Int16:
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt16,
-					Value: int16(i64),
-				}, cont, nil
+				token.Kind = sb.KindInt16
+				token.Value = int16(i64)
+				return cont, nil
 			case reflect.Int32:
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt32,
-					Value: int32(i64),
-				}, cont, nil
+				token.Kind = sb.KindInt32
+				token.Value = int32(i64)
+				return cont, nil
 			case reflect.Int64:
 				i64, ok := value.Int64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("int too large"))
+					return nil, we(fmt.Errorf("int too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindInt64,
-					Value: i64,
-				}, cont, nil
+				token.Kind = sb.KindInt64
+				token.Value = i64
+				return cont, nil
 
 			case reflect.Uint:
 				u64, ok := value.Uint64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("uint too large"))
+					return nil, we(fmt.Errorf("uint too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindUint,
-					Value: uint(u64),
-				}, cont, nil
+				token.Kind = sb.KindUint
+				token.Value = uint(u64)
+				return cont, nil
 			case reflect.Uint8:
 				u64, ok := value.Uint64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("uint too large"))
+					return nil, we(fmt.Errorf("uint too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindUint8,
-					Value: uint8(u64),
-				}, cont, nil
+				token.Kind = sb.KindUint8
+				token.Value = uint8(u64)
+				return cont, nil
 			case reflect.Uint16:
 				u64, ok := value.Uint64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("uint too large"))
+					return nil, we(fmt.Errorf("uint too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindUint16,
-					Value: uint16(u64),
-				}, cont, nil
+				token.Kind = sb.KindUint16
+				token.Value = uint16(u64)
+				return cont, nil
 			case reflect.Uint32:
 				u64, ok := value.Uint64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("uint too large"))
+					return nil, we(fmt.Errorf("uint too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindUint32,
-					Value: uint32(u64),
-				}, cont, nil
+				token.Kind = sb.KindUint32
+				token.Value = uint32(u64)
+				return cont, nil
 			case reflect.Uint64:
 				u64, ok := value.Uint64()
 				if !ok { // NOCOVER
-					return nil, nil, we(fmt.Errorf("uint too large"))
+					return nil, we(fmt.Errorf("uint too large"))
 				}
-				return &sb.Token{
-					Kind:  sb.KindUint64,
-					Value: u64,
-				}, cont, nil
+				token.Kind = sb.KindUint64
+				token.Value = u64
+				return cont, nil
 
 			default: // NOCOVER
-				return nil, nil, we(fmt.Errorf("not an integer: %v", *t))
+				return nil, we(fmt.Errorf("not an integer: %v", *t))
 			}
 
 		case starlark.Float:
 			if t == nil {
-				return &sb.Token{
-					Kind:  sb.KindFloat64,
-					Value: float64(value),
-				}, cont, nil
+				token.Kind = sb.KindFloat64
+				token.Value = float64(value)
+				return cont, nil
 			}
 			switch (*t).Kind() {
 			case reflect.Float32:
-				return &sb.Token{
-					Kind:  sb.KindFloat32,
-					Value: float32(value),
-				}, cont, nil
+				token.Kind = sb.KindFloat32
+				token.Value = float32(value)
+				return cont, nil
 			case reflect.Float64:
-				return &sb.Token{
-					Kind:  sb.KindFloat64,
-					Value: float64(value),
-				}, cont, nil
+				token.Kind = sb.KindFloat64
+				token.Value = float64(value)
+				return cont, nil
 			default: // NOCOVER
-				return nil, nil, we(fmt.Errorf("not a float: %v", *t))
+				return nil, we(fmt.Errorf("not a float: %v", *t))
 			}
 
 		case starlark.String:
-			return &sb.Token{
-				Kind:  sb.KindString,
-				Value: string(value),
-			}, cont, nil
+			token.Kind = sb.KindString
+			token.Value = string(value)
+			return cont, nil
 
 		case *starlark.List:
 			iter := value.Iterate()
 			var elemType *reflect.Type
 			if t != nil {
 				if kind := (*t).Kind(); kind != reflect.Slice && kind != reflect.Array { // NOCOVER
-					return nil, nil, fmt.Errorf("not a list: %v", *t)
+					return nil, fmt.Errorf("not a list: %v", *t)
 				}
 				e := (*t).Elem()
 				elemType = &e
 			}
-			return &sb.Token{
-					Kind: sb.KindArray,
-				}, marshalIter(
-					iter,
-					elemType,
-					func() (*sb.Token, Src, error) {
-						iter.Done()
-						return &sb.Token{
-							Kind: sb.KindArrayEnd,
-						}, cont, nil
-					},
-				), nil
+			token.Kind = sb.KindArray
+			return marshalIter(
+				iter,
+				elemType,
+				func(token *sb.Token) (Src, error) {
+					iter.Done()
+					token.Kind = sb.KindArrayEnd
+					return cont, nil
+				},
+			), nil
 
 		case starlark.Tuple:
 			var types []reflect.Type
 			if t != nil {
 				if (*t).Kind() != reflect.Func { // NOCOVER
-					return nil, nil, fmt.Errorf("not a tuple: %v", *t)
+					return nil, fmt.Errorf("not a tuple: %v", *t)
 				}
 				//TODO cache result
 				for i, n := 0, (*t).NumOut(); i < n; i++ {
 					types = append(types, (*t).Out(i))
 				}
 			}
-			return &sb.Token{
-					Kind: sb.KindTuple,
-				}, marshalValues(
-					value,
-					types,
-					func() (*sb.Token, Src, error) {
-						return &sb.Token{
-							Kind: sb.KindTupleEnd,
-						}, cont, nil
-					},
-				), nil
+			token.Kind = sb.KindTuple
+			return marshalValues(
+				value,
+				types,
+				func(token *sb.Token) (Src, error) {
+					token.Kind = sb.KindTupleEnd
+					return cont, nil
+				},
+			), nil
 
 		case *starlark.Dict:
 			iter := value.Iterate()
@@ -226,35 +204,31 @@ func MarshalValue(value starlark.Value, t *reflect.Type, cont Src) Src {
 				startKind = sb.KindObject
 				endKind = sb.KindObjectEnd
 			}
-			return &sb.Token{
-					Kind: startKind,
-				}, marshalDict(
-					value,
-					iter,
-					t,
-					func() (*sb.Token, Src, error) {
-						iter.Done()
-						return &sb.Token{
-							Kind: endKind,
-						}, cont, nil
-					},
-				), nil
+			token.Kind = startKind
+			return marshalDict(
+				value,
+				iter,
+				t,
+				func(token *sb.Token) (Src, error) {
+					iter.Done()
+					token.Kind = endKind
+					return cont, nil
+				},
+			), nil
 
 		case *starlark.Set:
 			iter := value.Iterate()
-			return &sb.Token{
-					Kind: sb.KindMap,
-				}, marshalSet(
-					value,
-					iter,
-					t,
-					func() (*sb.Token, Src, error) {
-						iter.Done()
-						return &sb.Token{
-							Kind: sb.KindMapEnd,
-						}, cont, nil
-					},
-				), nil
+			token.Kind = sb.KindMap
+			return marshalSet(
+				value,
+				iter,
+				t,
+				func(token *sb.Token) (Src, error) {
+					iter.Done()
+					token.Kind = sb.KindMapEnd
+					return cont, nil
+				},
+			), nil
 
 		default: // NOCOVER
 			panic(fmt.Errorf("unsupported type %T", value))
@@ -269,12 +243,12 @@ func marshalIter(
 	t *reflect.Type,
 	cont Src,
 ) Src {
-	return func() (*sb.Token, Src, error) {
+	return func(token *sb.Token) (Src, error) {
 		var value starlark.Value
 		if iter.Next(&value) {
-			return MarshalValue(value, t, marshalIter(iter, t, cont))()
+			return MarshalValue(value, t, marshalIter(iter, t, cont))(token)
 		}
-		return nil, cont, nil
+		return cont, nil
 	}
 }
 
@@ -283,14 +257,14 @@ func marshalValues(
 	types []reflect.Type,
 	cont Src,
 ) Src {
-	return func() (*sb.Token, Src, error) {
+	return func(token *sb.Token) (Src, error) {
 		if len(values) == 0 {
-			return nil, cont, nil
+			return cont, nil
 		}
 		if len(types) > 0 {
-			return MarshalValue(values[0], &types[0], marshalValues(values[1:], types[1:], cont))()
+			return MarshalValue(values[0], &types[0], marshalValues(values[1:], types[1:], cont))(token)
 		}
-		return MarshalValue(values[0], nil, marshalValues(values[1:], nil, cont))()
+		return MarshalValue(values[0], nil, marshalValues(values[1:], nil, cont))(token)
 	}
 }
 
@@ -308,16 +282,16 @@ func marshalDict(
 		vt := (*t).Elem()
 		valueType = &vt
 	}
-	return func() (*sb.Token, Src, error) {
+	return func(token *sb.Token) (Src, error) {
 		var key starlark.Value
 		if iter.Next(&key) {
 			return MarshalValue(
 				key,
 				keyType,
-				func() (*sb.Token, Src, error) {
+				func(token *sb.Token) (Src, error) {
 					value, ok, err := dict.Get(key)
 					if err != nil { // NOCOVER
-						return nil, nil, err
+						return nil, err
 					}
 					if !ok { // NOCOVER
 						panic("impossible")
@@ -327,11 +301,11 @@ func marshalDict(
 						value,
 						valueType,
 						marshalDict(dict, iter, t, cont),
-					)()
+					)(token)
 				},
-			)()
+			)(token)
 		}
-		return nil, cont, nil
+		return cont, nil
 	}
 }
 
@@ -346,20 +320,19 @@ func marshalSet(
 		kt := (*t).Key()
 		keyType = &kt
 	}
-	return func() (*sb.Token, Src, error) {
+	return func(token *sb.Token) (Src, error) {
 		var key starlark.Value
 		if iter.Next(&key) {
 			return MarshalValue(
 				key,
 				keyType,
-				func() (*sb.Token, Src, error) {
-					return &sb.Token{
-						Kind:  sb.KindBool,
-						Value: true,
-					}, marshalSet(set, iter, t, cont), nil
+				func(token *sb.Token) (Src, error) {
+					token.Kind = sb.KindBool
+					token.Value = true
+					return marshalSet(set, iter, t, cont), nil
 				},
-			)()
+			)(token)
 		}
-		return nil, cont, nil
+		return cont, nil
 	}
 }

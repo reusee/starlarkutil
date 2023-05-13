@@ -10,7 +10,7 @@ import (
 
 func Unmarshal(target *starlark.Value, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil { // NOCOVER
+		if token.Invalid() { // NOCOVER
 			return nil, we.With(
 				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
@@ -22,6 +22,8 @@ func Unmarshal(target *starlark.Value, cont Sink) Sink {
 		}
 
 		switch token.Kind {
+
+		case sb.KindNil:
 
 		case sb.KindBool:
 			*target = starlark.Bool(token.Value.(bool))
@@ -104,7 +106,7 @@ func Unmarshal(target *starlark.Value, cont Sink) Sink {
 
 func UnmarshalArray(list *starlark.List, cont Sink) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil { // NOCOVER
+		if token.Invalid() { // NOCOVER
 			return nil, we.With(
 				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
@@ -129,7 +131,7 @@ func UnmarshalDict(
 	cont Sink,
 ) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil { // NOCOVER
+		if token.Invalid() { // NOCOVER
 			return nil, we.With(
 				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
@@ -159,7 +161,7 @@ func UnmarshalTuple(
 	cont Sink,
 ) Sink {
 	return func(token *sb.Token) (Sink, error) {
-		if token == nil { // NOCOVER
+		if token.Invalid() { // NOCOVER
 			return nil, we.With(
 				io.ErrUnexpectedEOF,
 			)(sb.UnmarshalError)
